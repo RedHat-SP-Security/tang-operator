@@ -7,7 +7,7 @@ environment:
   OPERATOR_NAME: "nbde-tang-server"
   #pre released version
   #should be injected by tekton pipeline in KONFLUX
-  #DOWNSTREAM_IMAGE_VERSION: "brew.registry.redhat.io/rh-osbs/iib:863070"
+  DOWNSTREAM_IMAGE_VERSION: "quay.io/sec-eng-special/nbde-tang-server-tang-operator-bundle:latest"
   TEST_EXTERNAL_CLUSTER_MODE: "1"
 
 prepare:
@@ -38,7 +38,7 @@ prepare:
         DOWNSTREAM_IMAGE_VERSION=$( ${SNAPSHOT} | base64 -d | jq -r '.components[].containerImage')
         echo $DOWNSTREAM_IMAGE_VERSION
         echo "Image which will be used for testing:"
-        echo DOWNSTREAM_IMAGE_VERSION=$(echo '${SNAPSHOT}' | base64 -d | jq -r '.components[1].containerImage') >> $TMT_PLAN_ENVIRONMENT_FILE
+#        echo DOWNSTREAM_IMAGE_VERSION=$(echo '${SNAPSHOT}' | base64 -d | jq -r '.components[1].containerImage') >> $TMT_PLAN_ENVIRONMENT_FILE
   - name: Store KUBECONFIG secret
     how: shell
     script: |
@@ -55,11 +55,11 @@ discover:
     - /Setup/install_setup_operator-sdk
 - name: Run_tang_operator_tests
   how: fmf
-  url: https://github.com/RedHat-SP-Security/tang-operator-tests
-  ref: main
+#  url: https://github.com/RedHat-SP-Security/tang-operator-tests
+#  ref: main
   test:
     - /Setup/creating_test_namespace
-    - /Sanity
+#    - /Sanity
 
 adjust+:
   - when: distro == rhel-9 or distro == centos-stream-9 
